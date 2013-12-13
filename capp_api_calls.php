@@ -41,6 +41,11 @@ class CappApiCalls {
   	}
   }
   
+  /**
+   * Get's a token for current user and stores it in session for later use.
+   *
+   * @return bool True if a token was obtained. False at failure.
+   */
   private function getToken() {
     $ch =  curl_init($this->BASE_URL . 'authorization_tokens');
     
@@ -53,7 +58,7 @@ class CappApiCalls {
     ));
     
     $result = curl_exec($ch);
-    
+
     $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     
     if (curl_errno($ch)) {
@@ -63,24 +68,34 @@ class CappApiCalls {
       curl_close($ch);
     }
     
-    if ($http_status == '200') {
+    if ($http_status == '200' || $http_status == '201') {
 		  $results = json_decode($result);
-		  
+
 		  $_SESSION['token'] = $results->token;
+
+      return true;
 		} else {
-		  return array('status' => $http_status);
+      error_log("Can't get token. Status: ".$http_status);
+
+      return false;
 		}
   }
   
-  private function checkTokenAvailable() {
+  /**
+   * Check if a token is available. Tries to obtain one if not.
+   *
+   * @return bool True if a token is available. False if not and in can't obtain one
+   */
+  private function isTokenAvailable() {
   	if (isset($_SESSION['token']) && $_SESSION['token'] != '') {
   		return true;
-  	} else {
-  		$this->getToken();
+  	} elseif($this->getToken()) {
   		return true;
-  	}
-  	
-  	return false;
+    }
+    else
+    {
+      return false;
+    }
   }
   
   /**
@@ -88,7 +103,7 @@ class CappApiCalls {
    *
    */
   public function getAllPersons() {
-  	if ($this->checkTokenAvailable()) {
+  	if ($this->isTokenAvailable()) {
   		$url = $this->BASE_URL . 'persons';
   
   		$ch =  curl_init($url);
@@ -154,7 +169,7 @@ class CappApiCalls {
    */
   public function getSubscription($personID, $courseID) {
     if ($personID > 0 && $courseID > 0) {
-    	if ($this->checkTokenAvailable()) {
+    	if ($this->isTokenAvailable()) {
     		$url = $this->BASE_URL . 'subscriptions';
     
     		$ch =  curl_init($url);
@@ -190,7 +205,7 @@ class CappApiCalls {
    * token required
    */
   public function createSubscription($subscription) {
-  	if ($this->checkTokenAvailable()) {
+  	if ($this->isTokenAvailable()) {
   		$subscription = json_encode($subscription);
   				
   		$url = $this->BASE_URL . 'persons';
@@ -226,7 +241,7 @@ class CappApiCalls {
    * token required
    */
   public function createPerson($person) {
-  	if ($this->checkTokenAvailable()) {
+  	if ($this->isTokenAvailable()) {
   		$person = json_encode($person);
   				
   		$url = $this->BASE_URL . 'persons';
