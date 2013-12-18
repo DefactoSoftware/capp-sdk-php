@@ -210,7 +210,8 @@ class CappApiCalls {
   public function getSubscription($personID, $courseID) {
     if ($personID > 0 && $courseID > 0) {
     	if ($this->isTokenAvailable()) {
-    		$url = $this->BASE_URL . 'subscriptions';
+    		$query_string = http_build_query(['personid'=>$personID, 'courseid'=>$courseID]);
+    		$url = $this->BASE_URL . 'subscriptions?'. $query_string;
     
     		$ch =  curl_init($url);
     		
