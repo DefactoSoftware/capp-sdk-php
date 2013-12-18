@@ -162,6 +162,46 @@ class CappApiCalls {
 		  return array('status' => $http_status);
 		}
   }
+
+    /**
+   * Get course
+   */
+  public function getCourse($id) {
+    
+    //check parameter
+    if(!$id > 0) {
+            return array('status' => 'Invalid value for parameter id.');
+    }
+
+    //check token
+    if (!$this->isTokenAvailable()) {
+        return array('status' => 'No token available');
+    }
+
+    //good to go
+      $url = $this->BASE_URL . 'courses/'.$id;
+
+      $ch =  curl_init($url);
+      
+      curl_setopt_array($ch, array(
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => array("Content-Type: application/json", "Api-Token: ". (isset($_SESSION['token']) ? $_SESSION['token'] : '')),
+        CURLOPT_SSL_VERIFYPEER => $this->sslsetting
+      ));
+      
+      $result = curl_exec($ch);
+      $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+      curl_close($ch);
+      
+      if ($http_status == '200') {
+        $course = json_decode($result);
+        
+        return $course;
+      } else {
+        return array('status' => $http_status);
+      }
+ 
+  }
   
   /**
    * Fetch user subscription
