@@ -9,11 +9,11 @@ Wrapper class for the CAPP API. Ask Defacto to whitelist your IP adress for API 
 
 ## SSO - capp_sso.php
 
-Class to offer Singel Sign-On with CAPP. You need composer to resolve dependencies:
+Class to offer Single Sign-On with CAPP. You need composer to resolve dependencies:
 
 ```bash
 $ curl -sS https://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
-Instantiate class with CAPP url and OAuth secret. Call the login method with users e-mail adres to redirect the user to CAPP. See capp_sso.php for usage example and test page. CAPP administrators can generate an OAuth secret in CAPP on the <capp-url\>/EditSystemAppSettings.aspx page.
+Instantiate class with CAPP url and OAuth secret. Call the login method with users e-mail adres to redirect the user to CAPP. See capp_sso_test_page.php for usage example and test page. CAPP administrators can generate an OAuth secret in CAPP on the <capp-url\>/EditSystemAppSettings.aspx page.
