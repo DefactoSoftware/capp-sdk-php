@@ -1,13 +1,7 @@
 <?php
 if (isset($_POST['url']) && isset($_POST['secret']) && isset ($_POST['email'])):
 	require_once('capp_sso.php');
-
 	$sso = new CappSso($_POST['url'], $_POST['secret']);
-
-	function status ($result) {
-		return is_array($result) && isset($result['status']) ? 'error' : 'ok';
-	}
-
 	$sso->login($_POST['email']);
 else:
 ?>
