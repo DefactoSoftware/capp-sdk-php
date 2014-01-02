@@ -13,7 +13,7 @@ class CappSso {
 
   public function __construct($base_url, $secret) {
 
-    /** 
+    /**
      * Create a new instance of the URI class with the current URI, stripping the query string
      */
     $uriFactory = new \OAuth\Common\Http\Uri\UriFactory();
@@ -27,7 +27,7 @@ class CappSso {
         'capp' => array(
             'key'       => 'CappSSO',
             'secret'    => $secret,
-        ),    
+        ),
     );
 
     /** @var $serviceFactory \OAuth\ServiceFactory An OAuth service factory. */
@@ -59,6 +59,6 @@ class CappSso {
       //redirect to CAPP with request token
       $url = $this->cappService->getAuthorizationUri(array('oauth_token' => $token->getRequestToken()));
       header('Location: ' . $url);
-  } 
+  }
 }
 ?>
