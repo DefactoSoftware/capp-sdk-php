@@ -265,7 +265,7 @@ class CappApiCalls {
       $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
       curl_close($ch);
 
-      if ($http_status == '200') {
+      if (strncmp($http_status, '201', 2) === 0) {
         $subscription = json_decode($result);
         return $subscription;
       } else {
