@@ -249,13 +249,13 @@ class CappApiCalls {
     if ($this->isTokenAvailable()) {
       $subscription = json_encode($subscription);
 
-      $url = $this->BASE_URL . 'persons';
+      $url = $this->BASE_URL . 'subscriptions';
 
       $ch =  curl_init($url);
 
       curl_setopt_array($ch, array(
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST => "PUT",
+        CURLOPT_CUSTOMREQUEST => "POST",
         CURLOPT_POSTFIELDS => $subscription,
         CURLOPT_HTTPHEADER => array('Content-Type: application/json', "Api-Token: ". (isset($_SESSION['token']) ? $_SESSION['token'] : '')),
         CURLOPT_SSL_VERIFYPEER => $this->sslsetting
@@ -291,7 +291,7 @@ class CappApiCalls {
 
       curl_setopt_array($ch, array(
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST => "PUT",
+        CURLOPT_CUSTOMREQUEST => "POST",
         CURLOPT_POSTFIELDS => $person,
         CURLOPT_HTTPHEADER => array('Content-Type: application/json', "Api-Token: ". (isset($_SESSION['token']) ? $_SESSION['token'] : '')),
         CURLOPT_SSL_VERIFYPEER => $this->sslsetting
@@ -301,7 +301,7 @@ class CappApiCalls {
       $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
       curl_close($ch);
 
-      if ($http_status == '200') {
+      if (strncmp($http_status, '201', 2) === 0) {
         $person = json_decode($result);
         return $person;
       } else {
