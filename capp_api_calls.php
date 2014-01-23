@@ -347,6 +347,81 @@ class CappApiCalls {
       return array('status' => 'No token available');
     }
   }
+
+    /**
+   * Create a course template subscription
+   * Course template subscriptions are a trainee's interest in a course.
+   * They're usally done when there are no planned course dates that fits the trainees agenda.
+   * token required
+   */
+  public function createCourseTemplateSubscription($courseTemplateSubscription) {
+    if ($this->isTokenAvailable()) {
+      $courseTemplateSubscription = json_encode($courseTemplateSubscription);
+
+      $url = $this->BASE_URL . 'course_template_subscriptions';
+
+      $ch =  curl_init($url);
+
+      curl_setopt_array($ch, array(
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS => $courseTemplateSubscription,
+        CURLOPT_HTTPHEADER => array('Content-Type: application/json', "Api-Token: ". (isset($_SESSION['token']) ? $_SESSION['token'] : '')),
+        CURLOPT_SSL_VERIFYPEER => $this->sslsetting
+      ));
+
+      $result = curl_exec($ch);
+      $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+      curl_close($ch);
+
+      if (strncmp($http_status, '201', 2) === 0) {
+        $courseTemplateSubscription = json_decode($result);
+        return $courseTemplateSubscription;
+      } else {
+        return array('status' => $http_status);
+      }
+    } else {
+      return array('status' => 'No token available');
+    }
+  }
+
+  /**
+   * Get a course template subscription for a user on courstemplate
+   *
+   */
+  public function getCourseTemplateSubscription($personId, $courseTemplateId) {
+    if ($personId > 0 && $courseTemplateId > 0) {
+      if ($this->isTokenAvailable()) {
+        $query_string = http_build_query(['personid'=>$personId, 'coursetemplateid'=>$courseTemplateId]);
+        $url = $this->BASE_URL . 'course_template_subscriptions?'. $query_string;
+
+        $ch =  curl_init($url);
+
+        curl_setopt_array($ch, array(
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_HTTPHEADER => array("Content-Type: application/json", "Api-Token: ". (isset($_SESSION['token']) ? $_SESSION['token'] : '')),
+          CURLOPT_SSL_VERIFYPEER => $this->sslsetting
+        ));
+
+        $result = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($http_status == '200') {
+          $courseTemplateSubscription = json_decode($result);
+
+          return $courseTemplateSubscription;
+        } else {
+          return array('status' => $http_status);
+        }
+      } else {
+        return array('status' => 'No token available');
+      }
+    } else {
+      return array('status' => 'Function input incorrect.');
+    }
+  }
+
 }
 
 ?>

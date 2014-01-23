@@ -35,6 +35,14 @@ if($submitted) {
   ];
   $createdSubscription = $api->createSubscription($courseSubscriptionData);
   $courseSubscription = $api->getSubscription($createdPerson->id,$course->courseId);
+
+  //create course template subscription
+  $courseTemplateSubscriptionData = [
+      "traineePersonId" => $createdPerson->id,
+      "courseTemplateId" => $courseTemplates[0]->courseTemplateId
+  ];
+  $createdCourseTemplateSubscription = $api->createCourseTemplateSubscription($courseTemplateSubscriptionData);
+  $courseTemplateSubscription = $api->getCourseTemplateSubscription($createdPerson->id,$courseTemplates[0]->courseTemplateId);
 }
 ?>
 <!doctype html>
@@ -95,6 +103,15 @@ if($submitted) {
     <li>
       getSubscription: <span class="<?php echo status($courseSubscription); ?>"><?php echo status($courseSubscription); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($courseSubscription); ?></pre>
+    </li>
+
+      <li>
+      createCourseTemplateSubscription: <span class="<?php echo status($createdCourseTemplateSubscription); ?>"><?php echo status($createdCourseTemplateSubscription); ?></span> (<a>+/-</a>)<br>
+      <pre><?php print_r($createdCourseTemplateSubscription); ?></pre>
+    </li> 
+    <li>
+      getCourseTemplateSubscription: <span class="<?php echo status($courseTemplateSubscription); ?>"><?php echo status($courseTemplateSubscription); ?></span> (<a>+/-</a>)<br>
+      <pre><?php print_r($courseTemplateSubscription); ?></pre>
     </li>
   </ul>
 
