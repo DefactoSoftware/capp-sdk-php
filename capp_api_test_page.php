@@ -15,10 +15,26 @@ if($submitted) {
     return is_array($result) && isset($result['status']) ? 'error' : 'ok';
   }
 
+  //Retrieving data
   $persons = $api->getAllPersons();
   $courseTemplates = $api->getCourseTemplates(true);
-  $course = $api->getCourse(4);
-  $courseSubscription = $api->getSubscription(1,52);
+  $courses = $api->getCourses();
+  $course = $api->getCourse( $courses[0]->courseId);
+ 
+  //create person
+  $cappUser["email"]      = $_POST['person_email'];
+  $cappUser["loginName"]  = $_POST['person_email'];   //use e-mail as login name
+  $cappUser["firstName"]  = $_POST['person_firstname'];
+  $cappUser["lastName"]   = $_POST['person_lastname'];
+  $createdPerson = $api->createPerson($cappUser);
+
+  //create course subscription
+  $courseSubscriptionData = [
+      "traineePersonId" => $createdPerson->id,
+      "courseId" => $course->courseId
+  ];
+  $createdSubscription = $api->createSubscription($courseSubscriptionData);
+  $courseSubscription = $api->getSubscription($createdPerson->id,$course->courseId);
 }
 ?>
 <!doctype html>
@@ -34,27 +50,50 @@ if($submitted) {
 </head>
 <body>
   <form method="POST">
-    <input name="url" placeholder="API base url" type="url" required>
-    <input name="username" placeholder="username" required>
-    <input name="passphrase" placeholder="passphrase" required>
+    <fieldset>
+      <legend>API</legend>
+      <input name="url" placeholder="API base url" type="url" required>
+      <input name="username" placeholder="token username" required>
+      <input name="passphrase" placeholder="token passphrase" required>
+    </fieldset>
+    <fieldset>
+      <legend>Test person</legend>
+      <input name="person_email" placeholder="e-mail" type="email">
+      <input name="person_firstname" placeholder="first name">
+      <input name="person_lastname" placeholder="last name">
+    </fieldset>
     <input type="submit">
   </form>
 <?php if($submitted) { ?>
   <ul>
     <li>
-      Persons: <span class="<?php echo status($persons); ?>"><?php echo status($persons); ?></span> (<a>+/-</a>)<br>
+      getAllPersons: <span class="<?php echo status($persons); ?>"><?php echo status($persons); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($persons); ?></pre>
     </li>
     <li>
-      Course templates: <span class="<?php echo status($courseTemplates); ?>"><?php echo status($courseTemplates); ?></span>  (<a>+/-</a>)<br>
+      getCourseTemplates: <span class="<?php echo status($courseTemplates); ?>"><?php echo status($courseTemplates); ?></span>  (<a>+/-</a>)<br>
       <pre><?php print_r($courseTemplates); ?></pre>
     </li>
+
     <li>
-      Course: <span class="<?php echo status($course); ?>"><?php echo status($course); ?></span> (<a>+/-</a>)<br>
+      getCourses: <span class="<?php echo status($courses); ?>"><?php echo status($courses); ?></span> (<a>+/-</a>)<br>
+      <pre><?php print_r($courses); ?></pre>
+    </li>
+    <li>
+      getCourse: <span class="<?php echo status($course); ?>"><?php echo status($course); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($course); ?></pre>
     </li>
     <li>
-      Subscription: <span class="<?php echo status($courseSubscription); ?>"><?php echo status($courseSubscription); ?></span> (<a>+/-</a>)<br>
+      createPerson: <span class="<?php echo status($createdPerson); ?>"><?php echo status($createdPerson); ?></span> (<a>+/-</a>)<br>
+      <pre><?php print_r($createdPerson); ?></pre>
+    </li>
+
+  <li>
+      createSubscription: <span class="<?php echo status($createdSubscription); ?>"><?php echo status($createdSubscription); ?></span> (<a>+/-</a>)<br>
+      <pre><?php print_r($createdSubscription); ?></pre>
+    </li> 
+    <li>
+      getSubscription: <span class="<?php echo status($courseSubscription); ?>"><?php echo status($courseSubscription); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($courseSubscription); ?></pre>
     </li>
   </ul>
