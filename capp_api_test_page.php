@@ -19,7 +19,10 @@ if($submitted) {
   $persons = $api->getAllPersons();
   $courseTemplates = $api->getCourseTemplates(true);
   $courses = $api->getCourses();
-  $course = $api->getCourse( $courses[0]->courseId);
+
+  if(status($courses) == 'ok'):
+    $course = $api->getCourse( $courses[0]->courseId);
+  endif;
  
   //create person
   $cappUser["email"]      = $_POST['person_email'];
@@ -28,21 +31,23 @@ if($submitted) {
   $cappUser["lastName"]   = $_POST['person_lastname'];
   $createdPerson = $api->createPerson($cappUser);
 
-  //create course subscription
-  $courseSubscriptionData = [
-      "traineePersonId" => $createdPerson->id,
-      "courseId" => $course->courseId
-  ];
-  $createdSubscription = $api->createSubscription($courseSubscriptionData);
-  $courseSubscription = $api->getSubscription($createdPerson->id,$course->courseId);
+if(status($createdPerson) == 'ok'):
+    //create course subscription
+    $courseSubscriptionData = [
+        "traineePersonId" => $createdPerson->id,
+        "courseId" => $course->courseId
+    ];
+    $createdSubscription = $api->createSubscription($courseSubscriptionData);
+    $courseSubscription = $api->getSubscription($createdPerson->id,$course->courseId);
 
-  //create course template subscription
-  $courseTemplateSubscriptionData = [
-      "traineePersonId" => $createdPerson->id,
-      "courseTemplateId" => $courseTemplates[0]->courseTemplateId
-  ];
-  $createdCourseTemplateSubscription = $api->createCourseTemplateSubscription($courseTemplateSubscriptionData);
-  $courseTemplateSubscription = $api->getCourseTemplateSubscription($createdPerson->id,$courseTemplates[0]->courseTemplateId);
+    //create course template subscription
+    $courseTemplateSubscriptionData = [
+        "traineePersonId" => $createdPerson->id,
+        "courseTemplateId" => $courseTemplates[0]->courseTemplateId
+    ];
+    $createdCourseTemplateSubscription = $api->createCourseTemplateSubscription($courseTemplateSubscriptionData);
+    $courseTemplateSubscription = $api->getCourseTemplateSubscription($createdPerson->id,$courseTemplates[0]->courseTemplateId);
+  endif;
 }
 ?>
 <!doctype html>
@@ -88,14 +93,19 @@ if($submitted) {
       <pre><?php print_r($courses); ?></pre>
     </li>
     <li>
-      getCourse: <span class="<?php echo status($course); ?>"><?php echo status($course); ?></span> (<a>+/-</a>)<br>
+      getCourse:
+<?php if(status($courses) == 'ok'): ?>
+      <span class="<?php echo status($course); ?>"><?php echo status($course); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($course); ?></pre>
+<?php else: ?>
+  no courses to test with
+<?php endif; ?>
     </li>
     <li>
       createPerson: <span class="<?php echo status($createdPerson); ?>"><?php echo status($createdPerson); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($createdPerson); ?></pre>
     </li>
-
+<?php if(status($createdPerson) == 'ok'): ?>
   <li>
       createSubscription: <span class="<?php echo status($createdSubscription); ?>"><?php echo status($createdSubscription); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($createdSubscription); ?></pre>
@@ -113,6 +123,11 @@ if($submitted) {
       getCourseTemplateSubscription: <span class="<?php echo status($courseTemplateSubscription); ?>"><?php echo status($courseTemplateSubscription); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($courseTemplateSubscription); ?></pre>
     </li>
+<?php else: ?>
+    <li>
+      could not perform subscription tests as no person was created
+    </li>
+<?php endif; ?>
   </ul>
 
   <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
