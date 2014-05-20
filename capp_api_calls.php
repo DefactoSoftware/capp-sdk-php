@@ -10,7 +10,7 @@ class CappApiCalls {
   private $password = '';
   private $passphrase = '';
   private $sslsetting = false;
-
+ 
   public function __construct($base_url, $user = array()) {
     if (session_status() == PHP_SESSION_NONE) {
       session_start();
@@ -26,7 +26,7 @@ class CappApiCalls {
     }
     if (isset($user['email'])) {
       $this->email = $user['email'];
-    }
+    }  
     if (isset($user['password'])) {
       $this->password = $user['password'];
     }
@@ -34,7 +34,7 @@ class CappApiCalls {
       $this->passphrase = $user['passphrase'];
     }
   }
-
+ 
   public function __destruct() {
     if (isset($_SESSION['token'])) {
       unset($_SESSION['token']);
@@ -42,12 +42,12 @@ class CappApiCalls {
   }
 
   /**
-   * Get's a token for current user and stores it in session for later use.
-   *
-   * @return bool True if a token was obtained. False at failure.
-   */
+* Get's a token for current user and stores it in session for later use.
+*
+* @return bool True if a token was obtained. False at failure.
+*/
   private function getToken() {
-    $ch =  curl_init($this->BASE_URL . 'authorization_tokens');
+    $ch = curl_init($this->BASE_URL . 'authorization_tokens');
 
     curl_setopt_array($ch, array(
       CURLOPT_RETURNTRANSFER => true,
@@ -82,10 +82,10 @@ class CappApiCalls {
   }
 
   /**
-   * Check if a token is available. Tries to obtain one if not.
-   *
-   * @return bool True if a token is available. False if not and in can't obtain one
-   */
+* Check if a token is available. Tries to obtain one if not.
+*
+* @return bool True if a token is available. False if not and in can't obtain one
+*/
   private function isTokenAvailable() {
     if (isset($_SESSION['token']) && $_SESSION['token'] != '') {
       return true;
@@ -99,14 +99,14 @@ class CappApiCalls {
   }
 
   /**
-   * Fetch all users
-   *
-   */
+* Fetch all users
+*
+*/
   public function getAllPersons() {
     if ($this->isTokenAvailable()) {
       $url = $this->BASE_URL . 'persons';
 
-      $ch =  curl_init($url);
+      $ch = curl_init($url);
 
       curl_setopt_array($ch, array(
         CURLOPT_RETURNTRANSFER => true,
@@ -131,10 +131,10 @@ class CappApiCalls {
   }
 
   /**
-   * Get all course templates
-   *
-   * No Token required
-   */
+* Get all course templates
+*
+* No Token required
+*/
   public function getCourseTemplates($withCourses = false) {
     if ($withCourses) {
       $url = $this->BASE_URL . 'course_templates?withcourses=true';
@@ -142,7 +142,7 @@ class CappApiCalls {
       $url = $this->BASE_URL . 'course_templates';
     }
 
-    $ch =  curl_init($url);
+    $ch = curl_init($url);
 
     curl_setopt_array($ch, array(
       CURLOPT_RETURNTRANSFER => true,
@@ -163,9 +163,9 @@ class CappApiCalls {
     }
   }
 
-    /**
-   * Get course
-   */
+/**
+* Get course
+*/
   public function getCourse($id) {
 
     //check parameter
@@ -181,7 +181,7 @@ class CappApiCalls {
     //good to go
       $url = $this->BASE_URL . 'courses/'.$id;
 
-      $ch =  curl_init($url);
+      $ch = curl_init($url);
 
       curl_setopt_array($ch, array(
         CURLOPT_RETURNTRANSFER => true,
@@ -203,10 +203,9 @@ class CappApiCalls {
 
   }
 
-
-  /**
-   * Get course
-   */
+/**
+* Get course
+*/
   public function getCourses() {
 
     //check token
@@ -217,7 +216,7 @@ class CappApiCalls {
     //good to go
       $url = $this->BASE_URL . 'courses';
 
-      $ch =  curl_init($url);
+      $ch = curl_init($url);
 
       curl_setopt_array($ch, array(
         CURLOPT_RETURNTRANSFER => true,
@@ -240,16 +239,16 @@ class CappApiCalls {
   }
 
   /**
-   * Fetch user subscription
-   *
-   */
+* Fetch user subscription
+*
+*/
   public function getSubscription($personID, $courseID) {
     if ($personID > 0 && $courseID > 0) {
       if ($this->isTokenAvailable()) {
-        $query_string = http_build_query(['personid'=>$personID, 'courseid'=>$courseID]);
+        $query_string = http_build_query( array('personid'=>$personID, 'courseid'=>$courseID));
         $url = $this->BASE_URL . 'subscriptions?'. $query_string;
 
-        $ch =  curl_init($url);
+        $ch = curl_init($url);
 
         curl_setopt_array($ch, array(
           CURLOPT_RETURNTRANSFER => true,
@@ -275,19 +274,19 @@ class CappApiCalls {
       return array('status' => 'Function input incorrect.');
     }
   }
-
-  /**
-   * Create subscription
-   *
-   * token required
-   */
+  
+ /**
+ * Create subscription
+ *
+ * token required
+ */
   public function createSubscription($subscription) {
     if ($this->isTokenAvailable()) {
       $subscription = json_encode($subscription);
 
       $url = $this->BASE_URL . 'subscriptions';
 
-      $ch =  curl_init($url);
+      $ch = curl_init($url);
 
       curl_setopt_array($ch, array(
         CURLOPT_RETURNTRANSFER => true,
@@ -313,18 +312,18 @@ class CappApiCalls {
   }
 
   /**
-   * Create person object
-   *
-   * token required
-   */
+* Create person object
+*
+* token required
+*/
   public function createPerson($person) {
+    
     if ($this->isTokenAvailable()) {
       $person = json_encode($person);
-
+ 
       $url = $this->BASE_URL . 'persons';
 
-      $ch =  curl_init($url);
-
+      $ch = curl_init($url);
       curl_setopt_array($ch, array(
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => "POST",
@@ -335,6 +334,9 @@ class CappApiCalls {
 
       $result = curl_exec($ch);
       $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+    $st = curl_getinfo($ch);
+ 
       curl_close($ch);
 
       if (strncmp($http_status, '201', 2) === 0) {
@@ -348,20 +350,19 @@ class CappApiCalls {
     }
   }
 
-    /**
-   * Create a course template subscription
-   * Course template subscriptions are a trainee's interest in a course.
-   * They're usally done when there are no planned course dates that fits the trainees agenda.
-   * token required
-   */
+  /**
+  * Create a course template subscription
+  * Course template subscriptions are a trainee's interest in a course.
+  * They're usally done when there are no planned course dates that fits the trainees agenda.
+  * token required
+  */
   public function createCourseTemplateSubscription($courseTemplateSubscription) {
     if ($this->isTokenAvailable()) {
       $courseTemplateSubscription = json_encode($courseTemplateSubscription);
 
       $url = $this->BASE_URL . 'course_template_subscriptions';
-
-      $ch =  curl_init($url);
-
+      $ch = curl_init($url);
+ 
       curl_setopt_array($ch, array(
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => "POST",
@@ -372,6 +373,8 @@ class CappApiCalls {
 
       $result = curl_exec($ch);
       $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+    $tmp = curl_getinfo($ch);
       curl_close($ch);
 
       if (strncmp($http_status, '201', 2) === 0) {
@@ -386,16 +389,16 @@ class CappApiCalls {
   }
 
   /**
-   * Get a course template subscription for a user on courstemplate
-   *
-   */
+* Get a course template subscription for a user on courstemplate
+*
+*/
   public function getCourseTemplateSubscription($personId, $courseTemplateId) {
     if ($personId > 0 && $courseTemplateId > 0) {
       if ($this->isTokenAvailable()) {
-        $query_string = http_build_query(['personid'=>$personId, 'coursetemplateid'=>$courseTemplateId]);
+        $query_string = http_build_query(array('personid'=>$personId, 'coursetemplateid'=>$courseTemplateId));
         $url = $this->BASE_URL . 'course_template_subscriptions?'. $query_string;
 
-        $ch =  curl_init($url);
+        $ch = curl_init($url);
 
         curl_setopt_array($ch, array(
           CURLOPT_RETURNTRANSFER => true,
@@ -423,8 +426,8 @@ class CappApiCalls {
   }
 
   /**
-  * Fetch course subscriptions for the curret user.
-  *	
+  * Fetch user subscription
+  * 
   */
   public function getMySubscriptions(){
 
@@ -456,8 +459,8 @@ class CappApiCalls {
    } 
   
   /**
-  * Fetch course template subscriptions for the current user.
-  *	
+  * Fetch user template subscription of person
+  * 
   */
   public function getMyTemplateSubscriptions(){
 
@@ -487,76 +490,58 @@ class CappApiCalls {
         return array('status' => 'No token available');
       }
    }    
+
+  public function getPerson($email = false, $uid = false){
+  if(!$email && !$uid)
+    return false;     
+  if ($this->isTokenAvailable()) {
   
+      if($email)
+          $url = $this->BASE_URL . 'persons?email='.$email;
+      if($uid)  
+          $url = $this->BASE_URL . 'persons?username='.$email;
+                          
+        $ch = curl_init($url);
   
-  /**
-  * Get person information based on email
-  * token required
-  */
-  public function getPersonByEMail($email) {
-    if ($this->isTokenAvailable()) {
-
-      $url = $this->BASE_URL . 'persons?email='.$email;
-
-      $ch = curl_init($url);
-
-      curl_setopt_array($ch, array(
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST => "GET",
-        CURLOPT_HTTPHEADER => array('Content-Type: application/json', "Api-Token: ". (isset($_SESSION['token']) ? $_SESSION['token'] : '')),
-        CURLOPT_SSL_VERIFYPEER => $this->sslsetting
-      ));
-
-      $result = curl_exec($ch);
-      $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-      curl_close($ch);
-
-      if (strncmp($http_status, '200', 2) === 0) {
-        $person = json_decode($result);
-        return $person;
+        curl_setopt_array($ch, array(
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_CUSTOMREQUEST => "GET",
+          CURLOPT_HTTPHEADER => array('Content-Type: application/json', "Api-Token: ". (isset($_SESSION['token']) ? $_SESSION['token'] : '')),
+          CURLOPT_SSL_VERIFYPEER => $this->sslsetting
+        ));
+  
+        $result = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  
+      $st = curl_getinfo($ch);
+  
+        curl_close($ch);
+  
+        if (strncmp($http_status, '201', 2) === 0) {
+          $person = json_decode($result); 
+          return $person;
+        } else {
+          return array('status' => $http_status);
+        }
       } else {
-        return array('status' => $http_status);
-      }
-    } else {
-      return array('status' => 'No token available');
-    } 
-  }
-  
-  
-  /**
-  * Get person information based on username
-  * token required
-  */
-  public function getPersonByUsername($username) {
-    if ($this->isTokenAvailable()) {
+        return array('status' => 'No token available');
+      }     
+    }
 
-      $url = $this->BASE_URL . 'persons?username='.$username;
-
-      $ch = curl_init($url);
-
-      curl_setopt_array($ch, array(
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST => "GET",
-        CURLOPT_HTTPHEADER => array('Content-Type: application/json', "Api-Token: ". (isset($_SESSION['token']) ? $_SESSION['token'] : '')),
-        CURLOPT_SSL_VERIFYPEER => $this->sslsetting
-      ));
-
-      $result = curl_exec($ch);
-      $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-      curl_close($ch);
-
-      if (strncmp($http_status, '200', 2) === 0) {
-        $person = json_decode($result);
-        return $person;
-      } else {
-        return array('status' => $http_status);
-      }
-    } else {
-      return array('status' => 'No token available');
-    } 
-  }  
+    /**
+    * Get person information based on email person
+    * token required
+    */
+    public function getPersonByEmail($email) {
+     return $this->getPerson($email, false);    
+    }
+    /**
+    * Get person information based on email person
+    * token required
+    */
+    public function getPersonByUserName($uid) {
+    return $this->getPerson(false,$uid);
+    }   
 }
      
 
