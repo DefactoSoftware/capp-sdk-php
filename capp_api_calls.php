@@ -521,7 +521,42 @@ class CappApiCalls {
     } else {
       return array('status' => 'No token available');
     } 
-  } 
+  }
+  
+  
+  /**
+  * Get person information based on username
+  * token required
+  */
+  public function getPersonByUsername($username) {
+    if ($this->isTokenAvailable()) {
+
+      $url = $this->BASE_URL . 'persons?username='.$username;
+
+      $ch = curl_init($url);
+
+      curl_setopt_array($ch, array(
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array('Content-Type: application/json', "Api-Token: ". (isset($_SESSION['token']) ? $_SESSION['token'] : '')),
+        CURLOPT_SSL_VERIFYPEER => $this->sslsetting
+      ));
+
+      $result = curl_exec($ch);
+      $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+      curl_close($ch);
+
+      if (strncmp($http_status, '200', 2) === 0) {
+        $person = json_decode($result);
+        return $person;
+      } else {
+        return array('status' => $http_status);
+      }
+    } else {
+      return array('status' => 'No token available');
+    } 
+  }  
 }
      
 

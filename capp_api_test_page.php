@@ -26,7 +26,7 @@ if($submitted) {
  
   //create person
   $cappUser["email"]      = $_POST['person_email'];
-  $cappUser["loginName"]  = $_POST['person_email'];   //use e-mail as login name
+  $cappUser["loginName"]  = $_POST['person_username'];   //use e-mail as login name
   $cappUser["firstName"]  = $_POST['person_firstname'];
   $cappUser["lastName"]   = $_POST['person_lastname'];
   $createdPerson = $api->createPerson($cappUser);
@@ -72,6 +72,7 @@ if(status($createdPerson) == 'ok'):
     <fieldset>
       <legend>Test person</legend>
       <input name="person_email" placeholder="e-mail" type="email">
+      <input name="person_username" placeholder="username" type="text">
       <input name="person_firstname" placeholder="first name">
       <input name="person_lastname" placeholder="last name">
     </fieldset>
