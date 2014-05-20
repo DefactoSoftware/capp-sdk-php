@@ -16,4 +16,4 @@ $ curl -sS https://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
-Instantiate class with CAPP url and OAuth secret. Call the login method with users e-mail adres to redirect the user to CAPP. See capp_sso_test_page.php for usage example and test page. CAPP administrators can generate an OAuth secret in CAPP on the <capp-url\>/EditSystemAppSettings.aspx page.
+Instantiate class with CAPP url and OAuth secret. Call the login method with a users username to redirect the user to CAPP. See capp_sso_test_page.php for usage example and test page. CAPP administrators can generate an OAuth secret in CAPP on the <capp-url\>/EditSystemAppSettings.aspx page.

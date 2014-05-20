@@ -1,8 +1,8 @@
 <?php
-if (isset($_POST['url']) && isset($_POST['secret']) && isset ($_POST['email'])):
+if (isset($_POST['url']) && isset($_POST['secret']) && isset ($_POST['username'])):
   require_once('capp_sso.php');
   $sso = new CappSso($_POST['url'], $_POST['secret']);
-  $sso->login($_POST['email']);
+  $sso->login($_POST['username']);
 else:
 ?>
 <!doctype html>
@@ -26,7 +26,7 @@ else:
     </fieldset>
     <fieldset>
       <legend>Log in as</legend>
-      <label><span>E-mail:</span><input name="email" placeholder="e-mail" required type="email"></label>
+      <label><span>Username:</span><input name="username" placeholder="username" required type="text"></label>
     </fieldset>
     <button type="submit">Test</button>
   </form>

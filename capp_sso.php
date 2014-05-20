@@ -52,9 +52,9 @@ class CappSso {
 
   }
 
-  public function login($email) {
+  public function login($username) {
       //get request token
-      $token = $this->cappService->requestRequestToken(['EmailAddressProperty' => $email]);
+      $token = $this->cappService->requestRequestToken(['AccountNameProperty' => $username]);
 
       //redirect to CAPP with request token
       $url = $this->cappService->getAuthorizationUri(array('oauth_token' => $token->getRequestToken()));
