@@ -1,6 +1,6 @@
 <?php
-require 'vendor/autoload.php';
-require 'service/Capp.php';
+require_once 'vendor/autoload.php';
+require_once 'service/Capp.php';
 
 use OAuth\OAuth1\Service\Capp;
 use OAuth\Common\Storage\Session;

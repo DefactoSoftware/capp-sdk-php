@@ -1,8 +1,6 @@
 <?php
 namespace OAuth\OAuth1\Service;
 
-require 'vendor/autoload.php';
-
 use OAuth\OAuth1\Signature\SignatureInterface;
 use OAuth\OAuth1\Token\StdOAuth1Token;
 use OAuth\Common\Http\Exception\TokenResponseException;

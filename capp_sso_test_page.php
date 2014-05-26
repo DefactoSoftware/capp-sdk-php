@@ -15,13 +15,14 @@ else:
     label { display: block; }
     span { display: inline-block; width:10em; }
     input { width:15em; }
+    .hint { color: gray; font-size: small}
   </style>
 </head>
 <body>
   <form method="POST">
     <fieldset>
       <legend>CAPP data</legend>
-      <label><span>CAPP URL:</span><input name="url" placeholder="CAPP url" type="url" required></label>
+      <label><span>CAPP URL:</span><input name="url" placeholder="CAPP url" type="url" required> <span class="hint">(with trailing /)</span></label>
       <label><span>Secret:</span><input name="secret" placeholder="secret" required></label>
     </fieldset>
     <fieldset>
