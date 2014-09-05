@@ -1,6 +1,6 @@
 <?php
 if (isset($_POST['url']) && isset($_POST['secret']) && isset ($_POST['username'])):
-  require_once('capp_sso.php');
+  require_once 'capp_sso.php';
   $sso = new CappSso($_POST['url'], $_POST['secret']);
   $sso->login($_POST['username']);
 else:

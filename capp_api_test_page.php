@@ -1,8 +1,8 @@
 <?php
 
 $submitted = isset($_POST['url']) && isset($_POST['username']) && isset($_POST['passphrase']);
-if($submitted) {
-  require_once('capp_api_calls.php');
+if ($submitted) {
+  require_once 'capp_api_calls.php';
 
   $user = [
       "username" => $_POST['username'],
@@ -11,7 +11,8 @@ if($submitted) {
 
   $api = new CappApiCalls($_POST['url'], $user);
 
-  function status ($result) {
+  function status($result)
+  {
     return is_array($result) && isset($result['status']) ? 'error' : 'ok';
   }
 
@@ -23,7 +24,7 @@ if($submitted) {
   if(status($courses) == 'ok'):
     $course = $api->getCourse( $courses[0]->courseId);
   endif;
- 
+
   //create person
   $cappUser["email"]      = $_POST['person_email'];
   $cappUser["loginName"]  = $_POST['person_username'];   //use e-mail as login name
@@ -78,7 +79,7 @@ if(status($createdPerson) == 'ok'):
     </fieldset>
     <input type="submit">
   </form>
-<?php if($submitted) { ?>
+<?php if ($submitted) { ?>
   <ul>
     <li>
       getAllPersons: <span class="<?php echo status($persons); ?>"><?php echo status($persons); ?></span> (<a>+/-</a>)<br>
@@ -110,7 +111,7 @@ if(status($createdPerson) == 'ok'):
   <li>
       createSubscription: <span class="<?php echo status($createdSubscription); ?>"><?php echo status($createdSubscription); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($createdSubscription); ?></pre>
-    </li> 
+    </li>
     <li>
       getSubscription: <span class="<?php echo status($courseSubscription); ?>"><?php echo status($courseSubscription); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($courseSubscription); ?></pre>
@@ -119,7 +120,7 @@ if(status($createdPerson) == 'ok'):
       <li>
       createCourseTemplateSubscription: <span class="<?php echo status($createdCourseTemplateSubscription); ?>"><?php echo status($createdCourseTemplateSubscription); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($createdCourseTemplateSubscription); ?></pre>
-    </li> 
+    </li>
     <li>
       getCourseTemplateSubscription: <span class="<?php echo status($courseTemplateSubscription); ?>"><?php echo status($courseTemplateSubscription); ?></span> (<a>+/-</a>)<br>
       <pre><?php print_r($courseTemplateSubscription); ?></pre>
@@ -133,7 +134,7 @@ if(status($createdPerson) == 'ok'):
 
   <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
   <script>
-  $(function() {
+  $(function () {
     $("a").click(function () {
       $(this.parentElement).find("pre").slideToggle("slow");
     })
