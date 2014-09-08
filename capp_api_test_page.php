@@ -17,7 +17,7 @@ if ($submitted) {
   }
 
   //Retrieving data
-  $persons = $api->getAllPersons();
+  $persons = $api->getPersons();
   $courseTemplates = $api->getCourseTemplates(true);
   $courses = $api->getCourses();
 
@@ -82,17 +82,17 @@ if(status($createdPerson) == 'ok'):
 <?php if ($submitted) { ?>
   <ul>
     <li>
-      getAllPersons: <span class="<?php echo status($persons); ?>"><?php echo status($persons); ?></span> (<a>+/-</a>)<br>
-      <pre><?php print_r($persons); ?></pre>
+      getPersons: <span class="<?php echo status($persons); ?>"><?php echo status($persons); ?></span> (<a>+/-</a>)<br>
+      <pre><?php print_r(array_slice($persons, 0, 3)); ?></pre>
     </li>
     <li>
       getCourseTemplates: <span class="<?php echo status($courseTemplates); ?>"><?php echo status($courseTemplates); ?></span>  (<a>+/-</a>)<br>
-      <pre><?php print_r($courseTemplates); ?></pre>
+      <pre><?php print_r(array_slice($courseTemplates, 0, 3)); ?></pre>
     </li>
 
     <li>
       getCourses: <span class="<?php echo status($courses); ?>"><?php echo status($courses); ?></span> (<a>+/-</a>)<br>
-      <pre><?php print_r($courses); ?></pre>
+      <pre><?php print_r(array_slice($courses, 0, 3)); ?></pre>
     </li>
     <li>
       getCourse:
