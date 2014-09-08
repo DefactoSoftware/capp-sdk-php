@@ -17,3 +17,8 @@ $ php composer.phar install
 ```
 
 Instantiate class with CAPP url and OAuth secret. Call the login method with a users username to redirect the user to CAPP. See capp_sso_test_page.php for usage example and test page. CAPP administrators can generate an OAuth secret in CAPP on the <capp-url\>/EditSystemAppSettings.aspx page.
+
+
+## Maintainence
+
+Adhere to [PSR-1](http://www.php-fig.org/psr/psr-1/) and [PSR-2](http://www.php-fig.org/psr/psr-2/) coding style.

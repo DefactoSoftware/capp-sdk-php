@@ -7,12 +7,12 @@ use OAuth\Common\Storage\Session;
 use OAuth\Common\Consumer\Credentials;
 use OAuth\Common\Http\Uri\Uri;
 
-class CappSso {
-
+class CappSso
+{
   private $cappService;
 
-  public function __construct($base_url, $secret) {
-
+  public function __construct($base_url, $secret)
+  {
     /**
      * Create a new instance of the URI class with the current URI, stripping the query string
      */
@@ -52,7 +52,8 @@ class CappSso {
 
   }
 
-  public function login($username) {
+  public function login($username)
+  {
       //get request token
       $token = $this->cappService->requestRequestToken(['AccountNameProperty' => $username]);
 
@@ -61,4 +62,3 @@ class CappSso {
       header('Location: ' . $url);
   }
 }
-?>

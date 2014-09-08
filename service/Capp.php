@@ -1,5 +1,5 @@
 <?php
-namespace OAuth\OAuth1\Service;
+namespace OAuth\OAuth1\service;
 
 use OAuth\OAuth1\Signature\SignatureInterface;
 use OAuth\OAuth1\Token\StdOAuth1Token;
