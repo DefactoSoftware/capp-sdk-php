@@ -52,11 +52,17 @@ class CappSso
 
   }
 
-  public function login($username)
-  {
+  public function login($username, $options=array())
+  {             
+      $params = ['AccountNameProperty' => $username];
+   
+      if(!empty($options)){
+           $params = array_merge($params, $options);            
+      }  
+      
       //get request token
-      $token = $this->cappService->requestRequestToken(['AccountNameProperty' => $username]);
-
+      $token = $this->cappService->requestRequestToken( $params );
+  
       //redirect to CAPP with request token
       $url = $this->cappService->getAuthorizationUri(array('oauth_token' => $token->getRequestToken()));
       header('Location: ' . $url);

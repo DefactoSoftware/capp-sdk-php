@@ -255,7 +255,6 @@ class CappApiCalls
   {
     $data = json_encode($subscription);
     $url = $this->BASE_URL . 'subscriptions';
-
     $result = $this->getRequestWithToken($url, "POST", $data);
 
     return $result;
@@ -276,13 +275,31 @@ class CappApiCalls
   }
 
   /**
+  * Method createELearningSubscription
+  * 
+  * Create a subscription for an e-learning only course. 
+  * To successfully create an elearning subscription a courseTemplateId is mandatory.
+  * 
+  * @param  $courseTemplateSubscription (array) (minimal keys required: courseTemplateId) 
+  * @throws none
+  * @return stdObject with result 
+  */  
+  public function createELearningSubscription(array $courseTemplateSubscription)
+  {
+      $courseTemplateSubscription = json_encode($courseTemplateSubscription);
+      $url = $this->BASE_URL . 'elearning_subscriptions';
+
+      return $this->getRequestWithToken($url, "POST", $courseTemplateSubscription);
+  }
+
+  /**
   * Get a course template subscription for a user on courstemplate
   *
   */
   public function getCourseTemplateSubscription($personId, $courseTemplateId)
   {
     if (!($personId > 0 && $courseTemplateId > 0)) {
-      return array('status' => '422');
+      return array('status' => 'Function input incorrect.');
     }
 
     $query_string = http_build_query(array('personid'=>$personId, 'coursetemplateid'=>$courseTemplateId));
